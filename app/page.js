@@ -4,9 +4,9 @@ export default function Home() {
       <main>
         <h1>Learning Yarn Crafts</h1>
         <p>
-          Learning Yarn Crafts helps beginners pick up knitting, crochet, and
-          other yarn crafts. Find step-by-step guides, simple starter projects,
-          and tips for choosing the right yarn and tools.
+          Learning Yarn Crafts helps beginners learn knitting and crochet. Find
+          step-by-step guides, simple starter projects, and tips for choosing
+          the right yarn, needles, and hooks.
         </p>
       </main>
       <footer>Alexis Michalski</footer>
