@@ -15,20 +15,150 @@ body {
   flex-direction: column;
 }
 
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 24px;
+  background: #fff;
+  border-bottom: 1px solid #eadfd5;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.6rem;
+  color: #a4475b;
+  text-decoration: none;
+}
+
+.navbar nav {
+  display: flex;
+  gap: 24px;
+}
+
+.navbar nav a {
+  color: #3b2f2a;
+  text-decoration: none;
+  font-size: 1.05rem;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+}
+
+.navbar nav a:hover,
+.navbar nav a[aria-current="page"] {
+  color: #a4475b;
+  border-bottom-color: #a4475b;
+}
+
 main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 48px 16px;
+  padding: 64px 16px;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.hero {
+  max-width: 760px;
+}
+
+.hero p {
   max-width: 640px;
   margin: 0 auto;
 }
 
+.yarn-ball {
+  flex-shrink: 0;
+}
+
+.features {
+  width: 100%;
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.feature {
+  background: #f6e9e2;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.feature h3 {
+  font-size: 1.3rem;
+  margin: 0 0 10px;
+  color: #a4475b;
+}
+
+.feature p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.plans {
+  width: 100%;
+  margin-top: 64px;
+}
+
+h2 {
+  font-size: 2rem;
+  margin: 0 0 24px;
+  color: #a4475b;
+}
+
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.plan {
+  background: #fff;
+  border: 1px solid #eadfd5;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: left;
+}
+
+.plan h3 {
+  font-size: 1.4rem;
+  margin: 0 0 12px;
+}
+
+.plan .price {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #a4475b;
+  margin: 0 0 16px;
+}
+
+.plan .price span {
+  font-size: 1rem;
+  font-weight: normal;
+  color: #7a6a62;
+}
+
+.plan ul {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.8;
+}
+
 h1 {
-  font-size: clamp(2.2rem, 6vw, 3.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-size: clamp(2rem, 5vw, 3rem);
   margin: 0 0 20px;
   color: #a4475b;
 }
@@ -37,6 +167,125 @@ p {
   font-size: 1.15rem;
   line-height: 1.7;
   margin: 0;
+}
+
+.button {
+  display: inline-block;
+  margin-top: 32px;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 999px;
+  background: #a4475b;
+  color: #fff;
+  font: inherit;
+  font-size: 1.1rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: #8a3a4c;
+}
+
+.signup {
+  width: 100%;
+  margin-top: 32px;
+  text-align: left;
+}
+
+.signup fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 32px;
+}
+
+.signup legend {
+  font-size: 1.4rem;
+  color: #a4475b;
+  margin-bottom: 16px;
+}
+
+.signup label {
+  display: block;
+  margin-bottom: 16px;
+  font-size: 1rem;
+}
+
+.signup input[type="text"],
+.signup input[type="email"],
+.signup input[type="password"] {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border: 1px solid #d8c8bc;
+  border-radius: 8px;
+  font: inherit;
+  background: #fff;
+}
+
+.signup .account-fields {
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.signup legend {
+  width: 100%;
+  text-align: center;
+}
+
+.signup .button {
+  display: block;
+  margin: 0 auto;
+}
+
+.plan-option {
+  position: relative;
+  cursor: pointer;
+}
+
+.plan-option input {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  accent-color: #a4475b;
+}
+
+.plan-option .plan-name {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.plan-option .price {
+  display: block;
+}
+
+.plan-option .plan-feature {
+  display: block;
+  line-height: 1.8;
+}
+
+.plan-option .plan-feature::before {
+  content: "• ";
+}
+
+.plan-option.selected {
+  border: 2px solid #a4475b;
+}
+
+.signup-notice {
+  margin-top: 32px;
+  padding: 24px;
+  border-radius: 12px;
+  background: #f6e9e2;
+}
+
+.signup-notice h2 {
+  font-size: 1.5rem;
 }
 
 footer {
