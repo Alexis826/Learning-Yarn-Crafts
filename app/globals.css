@@ -288,6 +288,129 @@ p {
   font-size: 1.5rem;
 }
 
+.about h1 {
+  margin-bottom: 40px;
+}
+
+.craft {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+  margin-bottom: 56px;
+  text-align: left;
+}
+
+.craft:nth-of-type(even) {
+  flex-direction: row-reverse;
+}
+
+.craft-art {
+  flex: 0 0 220px;
+  background: #f6e9e2;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.craft-art svg,
+.differences-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.craft-text {
+  flex: 1;
+}
+
+.craft-text h2 {
+  font-size: 2rem;
+  margin: 0 0 12px;
+  color: #a4475b;
+}
+
+.craft-text h3 {
+  font-size: 1.15rem;
+  margin: 20px 0 8px;
+}
+
+.craft-text p {
+  font-size: 1.05rem;
+}
+
+.craft-text ul {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.8;
+}
+
+.differences {
+  width: 100%;
+}
+
+.differences-art {
+  max-width: 360px;
+  margin: 0 auto 24px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.differences table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #eadfd5;
+  border-radius: 12px;
+  overflow: hidden;
+  text-align: left;
+}
+
+.differences th,
+.differences td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eadfd5;
+  vertical-align: top;
+}
+
+.differences thead th {
+  background: #a4475b;
+  color: #fff;
+}
+
+.differences tbody th {
+  color: #a4475b;
+  white-space: nowrap;
+}
+
+.differences tbody tr:last-child th,
+.differences tbody tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 640px) {
+  .craft,
+  .craft:nth-of-type(even) {
+    flex-direction: column;
+  }
+
+  .craft-art {
+    flex-basis: auto;
+    width: 180px;
+  }
+
+  .differences th,
+  .differences td {
+    padding: 10px 8px;
+    font-size: 0.95rem;
+  }
+
+  .differences tbody th {
+    white-space: normal;
+  }
+}
+
 footer {
   text-align: center;
   padding: 24px 16px;
