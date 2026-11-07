@@ -9,6 +9,8 @@ const tabs = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/tutorials", label: "Tutorials" },
+  { href: "/ask-loopy", label: "Ask Loopy" },
+  { href: "/projects", label: "Projects" },
   { href: "/get-started", label: "Get Started" },
 ];
 
