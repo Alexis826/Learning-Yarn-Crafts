@@ -1,4 +1,5 @@
 import "./globals.css";
+import AskLoopyButton from "./AskLoopyButton";
 import NavBar from "./NavBar";
 
 export const metadata = {
@@ -15,6 +16,7 @@ export default function RootLayout({ children }) {
           {children}
           <footer>Alexis Michalski</footer>
         </div>
+        <AskLoopyButton />
       </body>
     </html>
   );

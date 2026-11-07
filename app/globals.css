@@ -701,9 +701,41 @@ p {
   line-height: 1.7;
 }
 
+.ask-loopy-button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px 12px 14px;
+  border-radius: 999px;
+  background: #a4475b;
+  color: #fff;
+  font-size: 1.05rem;
+  text-decoration: none;
+  box-shadow: 0 6px 18px rgba(59, 47, 42, 0.25);
+}
+
+.ask-loopy-button:hover {
+  background: #8a3a4c;
+}
+
+.ask-loopy-button .yarn-ball circle:first-of-type {
+  fill: #f6e9e2;
+}
+
+@media (max-width: 640px) {
+  .ask-loopy-button {
+    right: 16px;
+    bottom: 16px;
+  }
+}
+
 footer {
   text-align: center;
-  padding: 24px 16px;
+  padding: 24px 16px 88px;
   font-size: 0.95rem;
   color: #7a6a62;
   border-top: 1px solid #eadfd5;
