@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { authClient } from "@/lib/auth/client";
+import { authErrorMessage } from "@/lib/auth/errors";
 
 export default function SignInForm() {
   const router = useRouter();
@@ -22,13 +23,13 @@ export default function SignInForm() {
         password: form.get("password"),
       });
       if (signInError) {
-        setError(signInError.message || "Incorrect email or password.");
+        setError(authErrorMessage(signInError, "We couldn't sign you in. Please try again."));
         return;
       }
       router.push("/projects");
       router.refresh();
-    } catch {
-      setError("Something went wrong. Please check your connection and try again.");
+    } catch (err) {
+      setError(authErrorMessage(err, "We couldn't sign you in. Please try again."));
     } finally {
       setPending(false);
     }

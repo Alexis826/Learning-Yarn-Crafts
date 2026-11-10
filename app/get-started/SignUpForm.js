@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { authClient } from "@/lib/auth/client";
+import { authErrorMessage } from "@/lib/auth/errors";
 import { plans } from "../plans";
 import { choosePlan } from "./actions";
 
@@ -28,7 +29,7 @@ export default function SignUpForm() {
         password: form.get("password"),
       });
       if (signUpError) {
-        setError(signUpError.message || "We couldn't create your account. Please try again.");
+        setError(authErrorMessage(signUpError, "We couldn't create your account. Please try again."));
         return;
       }
 
@@ -40,8 +41,8 @@ export default function SignUpForm() {
 
       setWelcomeName(name);
       router.refresh();
-    } catch {
-      setError("Something went wrong. Please check your connection and try again.");
+    } catch (err) {
+      setError(authErrorMessage(err, "We couldn't create your account. Please try again."));
     } finally {
       setPending(false);
     }
