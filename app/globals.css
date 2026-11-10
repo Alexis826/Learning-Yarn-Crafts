@@ -819,6 +819,75 @@ p {
   font-size: 0.75rem;
 }
 
+.project-section {
+  width: 100%;
+  margin-top: 40px;
+}
+
+.project-section > h2 {
+  margin: 0 0 8px;
+  font-size: 1.8rem;
+  color: #a4475b;
+}
+
+.project-section .signup-notice {
+  margin: 24px auto 0;
+}
+
+.starter-group {
+  margin-top: 28px;
+  text-align: left;
+}
+
+.starter-group h3 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.starter-group .project-grid {
+  margin-top: 12px;
+}
+
+.example-badge + .yarn-ball {
+  margin-top: 14px;
+}
+
+.project-time {
+  font-size: 0.8rem;
+  color: #7a6a62;
+}
+
+.project-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin: 16px 0 0;
+  padding: 16px;
+  border-radius: 10px;
+  background: #f6e9e2;
+}
+
+.project-details dt {
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #a4475b;
+}
+
+.project-details dd {
+  margin: 2px 0 0;
+  font-size: 0.95rem;
+}
+
+.project-tip {
+  margin-top: 20px;
+  padding: 12px 14px;
+  border-left: 4px solid #e0a43a;
+  border-radius: 6px;
+  background: #fdf0d8;
+  font-size: 0.95rem;
+}
+
 .project-dialog {
   width: min(560px, calc(100% - 32px));
   max-height: calc(100% - 64px);

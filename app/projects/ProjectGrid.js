@@ -1,15 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import YarnBall from "../YarnBall";
-import { exampleProject } from "./exampleProject";
 
-// `saved` is the signed-in user's projects, loaded from the database.
-export default function ProjectGrid({ saved = [] }) {
-  const projects = [exampleProject, ...saved];
+// A grid of project tiles; clicking one opens its directions. `showAdd` puts
+// the Add project tile (which leads to Ask Loopy) first.
+export default function ProjectGrid({ projects, showAdd = false, badge }) {
   const [open, setOpen] = useState(null);
   const dialogRef = useRef(null);
+  const titleId = useId();
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -20,12 +20,14 @@ export default function ProjectGrid({ saved = [] }) {
   return (
     <>
       <ul className="project-grid">
-        <li>
-          <Link href="/ask-loopy" className="project-tile add-tile">
-            <span className="plus" aria-hidden="true">+</span>
-            Add project
-          </Link>
-        </li>
+        {showAdd && (
+          <li>
+            <Link href="/ask-loopy" className="project-tile add-tile">
+              <span className="plus" aria-hidden="true">+</span>
+              Add project
+            </Link>
+          </li>
+        )}
         {projects.map((project) => (
           <li key={project.id}>
             <button
@@ -33,10 +35,13 @@ export default function ProjectGrid({ saved = [] }) {
               className="project-tile"
               onClick={() => setOpen(project)}
             >
-              {project.example && <span className="example-badge">Example</span>}
+              {badge && <span className="example-badge">{badge}</span>}
               <YarnBall size={44} clipId={`yarn-${project.id}`} />
               <span className="project-name">{project.name}</span>
               {project.craft && <span className="project-craft">{project.craft}</span>}
+              {project.details?.Time && (
+                <span className="project-time">{project.details.Time}</span>
+              )}
             </button>
           </li>
         ))}
@@ -45,7 +50,7 @@ export default function ProjectGrid({ saved = [] }) {
       <dialog
         ref={dialogRef}
         className="project-dialog"
-        aria-labelledby="project-dialog-title"
+        aria-labelledby={titleId}
         onClose={() => setOpen(null)}
       >
         {open && (
@@ -53,7 +58,7 @@ export default function ProjectGrid({ saved = [] }) {
             <div className="dialog-header">
               <div>
                 {open.craft && <span className="project-craft">{open.craft}</span>}
-                <h2 id="project-dialog-title">{open.name}</h2>
+                <h2 id={titleId}>{open.name}</h2>
               </div>
               <button
                 type="button"
@@ -64,10 +69,15 @@ export default function ProjectGrid({ saved = [] }) {
                 ×
               </button>
             </div>
-            {open.example && (
-              <p className="example-note">
-                This is an example of how Loopy&apos;s instructions will look.
-              </p>
+            {open.details && (
+              <dl className="project-details">
+                {Object.entries(open.details).map(([label, value]) => (
+                  <div key={label}>
+                    <dt>{label}</dt>
+                    <dd>{value}</dd>
+                  </div>
+                ))}
+              </dl>
             )}
             {open.materials?.length > 0 && (
               <>
@@ -85,6 +95,11 @@ export default function ProjectGrid({ saved = [] }) {
                 <li key={step}>{step}</li>
               ))}
             </ol>
+            {open.tip && (
+              <p className="project-tip">
+                <strong>Tip:</strong> {open.tip}
+              </p>
+            )}
           </>
         )}
       </dialog>
