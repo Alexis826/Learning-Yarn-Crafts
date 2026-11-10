@@ -16,6 +16,10 @@ body {
 }
 
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  transition: transform 0.25s ease;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -24,6 +28,18 @@ body {
   padding: 14px 24px;
   background: #fff;
   border-bottom: 1px solid #eadfd5;
+}
+
+/* Slides up out of view while scrolling down; stays put for keyboard users
+   who are tabbing through it. */
+.navbar-hidden:not(:focus-within) {
+  transform: translateY(-100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar {
+    transition: none;
+  }
 }
 
 .brand {
