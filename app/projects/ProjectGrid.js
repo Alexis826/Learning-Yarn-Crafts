@@ -3,18 +3,13 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import YarnBall from "../YarnBall";
-import { exampleProject, loadProjects } from "./projectStore";
+import { exampleProject } from "./exampleProject";
 
-export default function ProjectGrid() {
-  const [projects, setProjects] = useState([exampleProject]);
+// `saved` is the signed-in user's projects, loaded from the database.
+export default function ProjectGrid({ saved = [] }) {
+  const projects = [exampleProject, ...saved];
   const [open, setOpen] = useState(null);
   const dialogRef = useRef(null);
-
-  // Saved projects are read after the first render, since localStorage only
-  // exists in the browser.
-  useEffect(() => {
-    setProjects([exampleProject, ...loadProjects()]);
-  }, []);
 
   useEffect(() => {
     const dialog = dialogRef.current;

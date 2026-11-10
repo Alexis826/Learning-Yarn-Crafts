@@ -1,32 +1,3 @@
-// Saved projects live in this browser's localStorage until accounts exist.
-// When Ask Loopy writes instructions, it should call saveProject() with:
-// { name, craft: "Crochet" | "Knitting", materials: [string], steps: [string] }
-
-const STORAGE_KEY = "cozy-loops-projects";
-
-export function loadProjects() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    return Array.isArray(saved) ? saved : [];
-  } catch {
-    return [];
-  }
-}
-
-export function saveProject(project) {
-  const entry = {
-    id: crypto.randomUUID(),
-    createdAt: new Date().toISOString(),
-    ...project,
-  };
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...loadProjects(), entry]));
-  } catch {
-    // Storage can be unavailable (private browsing); the project just isn't kept.
-  }
-  return entry;
-}
-
 // Shown so the page isn't empty before Loopy can make real projects.
 export const exampleProject = {
   id: "example-granny-square",

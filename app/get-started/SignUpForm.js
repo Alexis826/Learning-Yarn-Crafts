@@ -1,26 +1,63 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { authClient } from "@/lib/auth/client";
 import { plans } from "../plans";
+import { choosePlan } from "./actions";
 
 export default function SignUpForm() {
+  const router = useRouter();
   const [plan, setPlan] = useState("Free");
-  const [submitted, setSubmitted] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
+  const [welcomeName, setWelcomeName] = useState("");
 
-  // Accounts aren't saved anywhere yet: there is no sign-up backend.
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    setSubmitted(true);
+    const form = new FormData(event.currentTarget);
+    const name = form.get("name").trim();
+    setPending(true);
+    setError("");
+
+    try {
+      const { error: signUpError } = await authClient.signUp.email({
+        name,
+        email: form.get("email").trim(),
+        password: form.get("password"),
+      });
+      if (signUpError) {
+        setError(signUpError.message || "We couldn't create your account. Please try again.");
+        return;
+      }
+
+      const result = await choosePlan(plan);
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+
+      setWelcomeName(name);
+      router.refresh();
+    } catch {
+      setError("Something went wrong. Please check your connection and try again.");
+    } finally {
+      setPending(false);
+    }
   }
 
-  if (submitted) {
+  if (welcomeName) {
     return (
       <div className="signup-notice" role="status">
-        <h2>Thanks for your interest!</h2>
+        <h2>Welcome, {welcomeName}!</h2>
         <p>
-          Sign-ups for the {plan} plan aren&apos;t open yet, so no account was
-          created. Check back soon.
+          Your account is ready on the {plan} plan. Your projects will be saved
+          to your account.
         </p>
+        <Link href="/projects" className="button">
+          Go to my projects
+        </Link>
       </div>
     );
   }
@@ -79,9 +116,17 @@ export default function SignUpForm() {
         </div>
       </fieldset>
 
-      <button type="submit" className="button">
-        Create account
+      {error && (
+        <p className="form-error" role="alert">
+          {error}
+        </p>
+      )}
+      <button type="submit" className="button" disabled={pending}>
+        {pending ? "Creating account…" : "Create account"}
       </button>
+      <p className="form-switch">
+        Already have an account? <Link href="/sign-in">Sign in</Link>
+      </p>
     </form>
   );
 }

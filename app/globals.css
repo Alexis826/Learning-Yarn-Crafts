@@ -701,6 +701,65 @@ p {
   line-height: 1.7;
 }
 
+.button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.signup-notice {
+  max-width: 560px;
+}
+
+.signup-notice .button {
+  margin-top: 20px;
+}
+
+.form-error {
+  max-width: 420px;
+  margin: 0 auto 20px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #fbe4e4;
+  color: #8a1f2d;
+  text-align: center;
+}
+
+.form-switch {
+  margin-top: 16px;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.form-switch a {
+  color: #a4475b;
+}
+
+.nav-account {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-user {
+  color: #7a6a62;
+}
+
+.nav-signout {
+  padding: 4px 12px;
+  border: 1px solid #a4475b;
+  border-radius: 999px;
+  background: none;
+  color: #a4475b;
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.nav-signout:hover {
+  background: #a4475b;
+  color: #fff;
+}
+
 .ask-loopy-button {
   position: fixed;
   right: 24px;

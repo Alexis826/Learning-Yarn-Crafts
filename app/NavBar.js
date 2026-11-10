@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth/client";
 import { bethEllen } from "./fonts";
 import YarnBall from "./YarnBall";
 
@@ -11,11 +12,19 @@ const tabs = [
   { href: "/tutorials", label: "Tutorials" },
   { href: "/ask-loopy", label: "Ask Loopy" },
   { href: "/projects", label: "Projects" },
-  { href: "/get-started", label: "Get Started" },
 ];
 
 export default function NavBar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
+  const user = session?.user;
+
+  async function signOut() {
+    await authClient.signOut();
+    router.push("/");
+    router.refresh();
+  }
 
   return (
     <header className="navbar">
@@ -33,6 +42,30 @@ export default function NavBar() {
             {tab.label}
           </Link>
         ))}
+        {!isPending && !user && (
+          <>
+            <Link
+              href="/get-started"
+              aria-current={pathname === "/get-started" ? "page" : undefined}
+            >
+              Get Started
+            </Link>
+            <Link
+              href="/sign-in"
+              aria-current={pathname === "/sign-in" ? "page" : undefined}
+            >
+              Sign in
+            </Link>
+          </>
+        )}
+        {user && (
+          <span className="nav-account">
+            <span className="nav-user">Hi, {user.name || user.email}</span>
+            <button type="button" className="nav-signout" onClick={signOut}>
+              Sign out
+            </button>
+          </span>
+        )}
       </nav>
     </header>
   );
