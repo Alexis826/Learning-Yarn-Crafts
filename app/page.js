@@ -91,7 +91,6 @@ export default function Home() {
         <div className="loopy-intro">
           <LoopyMascot size={120} clipId="loopy-intro" />
           <div>
-            <span className="coming-soon-badge">Coming soon</span>
             <h2 id="meet-loopy-heading" className={bethEllen.className}>
               Meet Loopy, your pattern pal
             </h2>

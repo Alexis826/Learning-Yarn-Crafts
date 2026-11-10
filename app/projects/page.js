@@ -17,7 +17,7 @@ export default async function Projects() {
   const user = await currentUser();
   const saved = user
     ? await sql`
-        select id, name, craft, materials, steps
+        select id, name, craft, materials, steps, details, tip
         from projects
         where user_id = ${user.id}
         order by created_at
