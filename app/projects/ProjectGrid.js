@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import YarnBall from "../YarnBall";
+import ProjectRendering, { hasRendering } from "./ProjectRendering";
 
 // A grid of project tiles; clicking one opens its directions. `showAdd` puts
 // the Add project tile (which leads to Ask Loopy) first.
@@ -36,7 +37,11 @@ export default function ProjectGrid({ projects, showAdd = false, badge }) {
               onClick={() => setOpen(project)}
             >
               {badge && <span className="example-badge">{badge}</span>}
-              <YarnBall size={44} clipId={`yarn-${project.id}`} />
+              {hasRendering(project.rendering) ? (
+                <ProjectRendering kind={project.rendering} size={64} />
+              ) : (
+                <YarnBall size={44} clipId={`yarn-${project.id}`} />
+              )}
               <span className="project-name">{project.name}</span>
               {project.craft && <span className="project-craft">{project.craft}</span>}
               {project.details?.Time && (
@@ -69,6 +74,12 @@ export default function ProjectGrid({ projects, showAdd = false, badge }) {
                 ×
               </button>
             </div>
+            {hasRendering(open.rendering) && (
+              <figure className="project-preview">
+                <ProjectRendering kind={open.rendering} size={180} />
+                <figcaption>What your finished {open.name.toLowerCase()} will look like</figcaption>
+              </figure>
+            )}
             {open.details && (
               <dl className="project-details">
                 {Object.entries(open.details).map(([label, value]) => (

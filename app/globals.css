@@ -1090,8 +1090,33 @@ p {
   margin-top: 12px;
 }
 
-.example-badge + .yarn-ball {
+.example-badge + .yarn-ball,
+.example-badge + .project-rendering {
   margin-top: 14px;
+}
+
+.project-rendering {
+  flex-shrink: 0;
+}
+
+.project-preview {
+  margin: 16px 0 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #eadfd5;
+  text-align: center;
+}
+
+.project-preview svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.project-preview figcaption {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #7a6a62;
 }
 
 .project-time {

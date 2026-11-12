@@ -3,6 +3,7 @@
 export const starterProjects = [
   {
     id: "starter-crochet-dishcloth",
+    rendering: "crochet-dishcloth",
     name: "Simple Dishcloth",
     craft: "Crochet",
     details: {
@@ -32,6 +33,7 @@ export const starterProjects = [
   },
   {
     id: "starter-granny-square",
+    rendering: "granny-square",
     name: "Granny Square Coaster",
     craft: "Crochet",
     details: {
@@ -61,6 +63,7 @@ export const starterProjects = [
   },
   {
     id: "starter-knit-dishcloth",
+    rendering: "knit-dishcloth",
     name: "Garter Stitch Dishcloth",
     craft: "Knitting",
     details: {
@@ -90,6 +93,7 @@ export const starterProjects = [
   },
   {
     id: "starter-knit-headband",
+    rendering: "headband",
     name: "Chunky Garter Headband",
     craft: "Knitting",
     details: {
