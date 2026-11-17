@@ -1512,6 +1512,42 @@ p {
   font-variant-numeric: tabular-nums;
 }
 
+.counter-by {
+  margin-left: 1px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.counter-step {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #7a6a62;
+}
+
+.counter-step span {
+  margin-right: 4px;
+}
+
+.counter-step button {
+  min-width: 34px;
+  padding: 3px 8px;
+  border: 1px solid #e3c9cf;
+  border-radius: 999px;
+  background: #fff;
+  color: #a4475b;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.counter-step button.active {
+  border-color: #a4475b;
+  background: #a4475b;
+  color: #fff;
+}
+
 .counter-reset {
   border: none;
   background: none;
