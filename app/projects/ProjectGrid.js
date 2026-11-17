@@ -7,6 +7,23 @@ import ProgressBar from "./ProgressBar";
 import ProjectRendering, { hasRendering } from "./ProjectRendering";
 import StitchCounter from "./StitchCounter";
 import { useProjectProgress } from "./useProjectProgress";
+import { useReadAloud } from "./useReadAloud";
+
+function SpeakerIcon({ speaking }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor" />
+      {speaking ? (
+        <path d="M17 9l4 6M21 9l-4 6" />
+      ) : (
+        <>
+          <path d="M16 9a4 4 0 0 1 0 6" />
+          <path d="M18.5 6.5a7.5 7.5 0 0 1 0 11" />
+        </>
+      )}
+    </svg>
+  );
+}
 
 // A grid of project tiles, most completed first; clicking one opens its
 // directions, with step checkboxes and a row & stitch counter. `showAdd` puts
@@ -25,6 +42,7 @@ export default function ProjectGrid({
   const dialogRef = useRef(null);
   const titleId = useId();
   const progress = useProjectProgress({ signedIn, initial: initialProgress });
+  const readAloud = useReadAloud();
 
   function toggleStep(project, index) {
     const done = new Set(progress.get(project.id).completedSteps);
@@ -98,7 +116,10 @@ export default function ProjectGrid({
         ref={dialogRef}
         className="project-dialog"
         aria-labelledby={titleId}
-        onClose={() => setOpen(null)}
+        onClose={() => {
+          readAloud.stop();
+          setOpen(null);
+        }}
       >
         {open && (
           <>
@@ -165,8 +186,23 @@ export default function ProjectGrid({
                         onChange={() => toggleStep(open, index)}
                       />
                       <span className="step-number">{index + 1}.</span>
-                      <span>{step}</span>
+                      <span className="step-text">{step}</span>
                     </label>
+                    {readAloud.supported && (
+                      <button
+                        type="button"
+                        className={`speak-step${readAloud.speakingId === index ? " speaking" : ""}`}
+                        aria-label={
+                          readAloud.speakingId === index
+                            ? `Stop reading step ${index + 1}`
+                            : `Read step ${index + 1} aloud`
+                        }
+                        aria-pressed={readAloud.speakingId === index}
+                        onClick={() => readAloud.toggle(index, `Step ${index + 1}. ${step}`)}
+                      >
+                        <SpeakerIcon speaking={readAloud.speakingId === index} />
+                      </button>
+                    )}
                   </li>
                 );
               })}
