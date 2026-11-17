@@ -97,6 +97,67 @@ main {
   flex-shrink: 0;
 }
 
+.continue-project {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 640px;
+  margin-top: 32px;
+  padding: 18px 22px;
+  border: 1px solid #eadfd5;
+  border-left: 6px solid #a4475b;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(164, 71, 91, 0.12);
+  text-align: left;
+}
+
+.continue-project svg {
+  flex-shrink: 0;
+}
+
+.continue-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.continue-kicker {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #7a6a62;
+}
+
+.continue-project h2 {
+  margin: 2px 0 8px;
+  font-size: 1.3rem;
+  color: #3b2f2a;
+}
+
+.continue-counts {
+  margin: 6px 0 0;
+  font-size: 0.85rem;
+  color: #7a6a62;
+}
+
+.continue-button.button {
+  margin-top: 0;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .continue-project {
+    flex-wrap: wrap;
+  }
+
+  .continue-button.button {
+    width: 100%;
+    text-align: center;
+  }
+}
+
 .features {
   width: 100%;
   margin-top: 56px;
@@ -798,6 +859,55 @@ p {
   text-align: center;
 }
 
+.prompt-chips {
+  margin: 0 0 18px;
+}
+
+.prompt-chips-label {
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #7a6a62;
+}
+
+.prompt-chips ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.prompt-chip {
+  padding: 7px 14px;
+  border: 1px solid #e3c9cf;
+  border-radius: 999px;
+  background: #fff;
+  color: #3b2f2a;
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.prompt-chip.from-history {
+  border-color: #d97a8c;
+  background: #fdf0f2;
+}
+
+.prompt-chip:hover {
+  border-color: #a4475b;
+  background: #a4475b;
+  color: #fff;
+}
+
+.loopy-followups {
+  max-width: 620px;
+  margin: 20px auto 0;
+}
+
 .loopy-field {
   display: block;
   margin-bottom: 14px;
@@ -1153,6 +1263,220 @@ p {
   border-radius: 6px;
   background: #fdf0d8;
   font-size: 0.95rem;
+}
+
+/* Step progress: a bar plus "3 of 8 steps". */
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.progress.compact {
+  width: 100%;
+  align-items: center;
+}
+
+.progress-track {
+  display: block;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: #eadfd5;
+  overflow: hidden;
+}
+
+.progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: #d97a8c;
+  transition: width 0.25s ease;
+}
+
+.progress.finished .progress-fill {
+  background: #5a9e6a;
+}
+
+.progress-label {
+  font-size: 0.8rem;
+  color: #7a6a62;
+}
+
+.progress.finished .progress-label {
+  color: #3d7a4a;
+  font-weight: bold;
+}
+
+.directions-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 20px 0 8px;
+}
+
+.project-dialog .directions-heading h3 {
+  margin: 0;
+}
+
+.project-dialog .step-checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.project-dialog .step-checklist li {
+  margin-bottom: 4px;
+}
+
+.step-checklist label {
+  display: flex;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  line-height: 1.6;
+}
+
+.step-checklist label:hover {
+  background: #f6e9e2;
+}
+
+.step-checklist input {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  accent-color: #a4475b;
+  cursor: pointer;
+}
+
+.step-number {
+  flex-shrink: 0;
+  font-weight: bold;
+  color: #a4475b;
+}
+
+.step-checklist li.done label {
+  color: #9a8a82;
+}
+
+.step-checklist li.done label span:last-child {
+  text-decoration: line-through;
+  text-decoration-color: rgba(164, 71, 91, 0.45);
+}
+
+.progress-note {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: #7a6a62;
+}
+
+.progress-note a {
+  color: #a4475b;
+}
+
+/* Row & stitch counter */
+.stitch-counter {
+  margin-top: 20px;
+  border: 1px solid #eadfd5;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.stitch-counter-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  font: inherit;
+  font-weight: bold;
+  color: #a4475b;
+  text-align: left;
+  cursor: pointer;
+}
+
+.counter-summary {
+  margin-left: auto;
+  font-weight: normal;
+  font-size: 0.9rem;
+  color: #7a6a62;
+}
+
+.counter-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  padding: 0 16px 16px;
+}
+
+.counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 12px;
+  background: #f6e9e2;
+}
+
+.counter-label {
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #7a6a62;
+}
+
+.counter-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.counter-button {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: #a4475b;
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.counter-button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.counter-value {
+  min-width: 56px;
+  font-size: 2.2rem;
+  font-weight: bold;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.counter-reset {
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.85rem;
+  color: #a4475b;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.counter-reset:disabled {
+  color: #b9aaa2;
+  text-decoration: none;
+  cursor: default;
 }
 
 .project-dialog {

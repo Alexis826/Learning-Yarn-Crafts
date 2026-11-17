@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { currentUser } from "@/lib/auth/server";
-import { loopyAllowance } from "@/lib/loopyUsage";
+import { loopyAllowance, suggestedPrompts } from "@/lib/loopyUsage";
 import { bethEllen } from "../fonts";
 import LoopyMascot from "../LoopyMascot";
 import AskLoopyForm from "./AskLoopyForm";
@@ -17,6 +17,7 @@ export const maxDuration = 300;
 export default async function AskLoopy() {
   const user = await currentUser();
   const allowance = user ? await loopyAllowance(user.id) : null;
+  const suggestions = allowance?.limit ? await suggestedPrompts(user.id) : [];
 
   return (
     <main className="ask-loopy">
@@ -57,6 +58,7 @@ export default async function AskLoopy() {
       ) : (
         <AskLoopyForm
           remaining={allowance.limit === Infinity ? null : allowance.remaining}
+          suggestions={suggestions}
         />
       )}
     </main>

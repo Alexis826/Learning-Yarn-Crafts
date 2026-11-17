@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useRef } from "react";
 import LoopyMascot from "../LoopyMascot";
 import { askLoopy } from "./actions";
 
@@ -42,16 +42,57 @@ function ChatIcon() {
   );
 }
 
+// Clickable prompts that fill in the message box.
+function PromptChips({ prompts, onPick, label }) {
+  if (prompts.length === 0) return null;
+  return (
+    <div className="prompt-chips">
+      <p className="prompt-chips-label">{label}</p>
+      <ul>
+        {prompts.map((prompt) => (
+          <li key={prompt.text}>
+            <button
+              type="button"
+              className={`prompt-chip${prompt.fromHistory ? " from-history" : ""}`}
+              onClick={() => onPick(prompt.text)}
+            >
+              {prompt.text}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 // `remaining` is how many requests are left this month, or null for unlimited.
-export default function AskLoopyForm({ remaining }) {
+// `suggestions` are prompts based on the user's recent requests and common
+// beginner questions.
+export default function AskLoopyForm({ remaining, suggestions = [] }) {
   const [state, formAction, pending] = useActionState(askLoopy, null);
   const left = state && "remaining" in state ? state.remaining : remaining;
+  const messageRef = useRef(null);
+
+  function fillPrompt(text) {
+    const box = messageRef.current;
+    box.value = text;
+    box.scrollIntoView({ block: "center", behavior: "smooth" });
+    box.focus();
+  }
+
+  const hasHistory = suggestions.some((s) => s.fromHistory);
 
   return (
     <>
       <form className="loopy-form" action={formAction}>
         <h2 className="loopy-form-title">What can Loopy help with?</h2>
         <p className="loopy-form-subtitle">Fill in any one of these, or combine them.</p>
+
+        <PromptChips
+          prompts={suggestions}
+          onPick={fillPrompt}
+          label={hasHistory ? "Ideas based on what you've asked" : "Try asking"}
+        />
 
         <label className="loopy-field">
           <span className="loopy-field-label">
@@ -84,6 +125,7 @@ export default function AskLoopyForm({ remaining }) {
             Message for Loopy
           </span>
           <textarea
+            ref={messageRef}
             name="message"
             rows={4}
             placeholder="Paste a pattern, or ask something like “What yarn should I use for a baby blanket?”"
@@ -162,6 +204,14 @@ export default function AskLoopyForm({ remaining }) {
               </p>
             </article>
           )}
+
+          <div className="loopy-followups">
+            <PromptChips
+              prompts={(state.suggestions ?? []).map((text) => ({ text, fromHistory: true }))}
+              onPick={fillPrompt}
+              label="Ask Loopy next"
+            />
+          </div>
         </section>
       )}
     </>

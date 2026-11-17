@@ -1,7 +1,44 @@
 import Link from "next/link";
+import { currentUser } from "@/lib/auth/server";
+import { recentProject } from "@/lib/recentProject";
 import { bethEllen } from "./fonts";
 import LoopyMascot from "./LoopyMascot";
 import { plans } from "./plans";
+import ProgressBar from "./projects/ProgressBar";
+import ProjectRendering, { hasRendering } from "./projects/ProjectRendering";
+import YarnBall from "./YarnBall";
+
+// Shows a signed-in user's latest project, so it's rendered per request.
+export const dynamic = "force-dynamic";
+
+// "Continue where you left off" for the user's most recent unfinished project.
+function ContinueProject({ project }) {
+  return (
+    <section className="continue-project" aria-labelledby="continue-heading">
+      {hasRendering(project.rendering) ? (
+        <ProjectRendering kind={project.rendering} size={72} />
+      ) : (
+        <YarnBall size={56} clipId="yarn-continue" />
+      )}
+      <div className="continue-text">
+        <p className="continue-kicker">Continue where you left off</p>
+        <h2 id="continue-heading">{project.name}</h2>
+        <ProgressBar done={project.done} total={project.total} />
+        {(project.rowCount > 0 || project.stitchCount > 0) && (
+          <p className="continue-counts">
+            Row {project.rowCount} · Stitch {project.stitchCount}
+          </p>
+        )}
+      </div>
+      <Link
+        href={`/projects?open=${encodeURIComponent(project.id)}`}
+        className="button continue-button"
+      >
+        Continue
+      </Link>
+    </section>
+  );
+}
 
 const features = [
   {
@@ -64,7 +101,10 @@ function CornerSketch() {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const user = await currentUser();
+  const recent = user ? await recentProject(user.id) : null;
+
   return (
     <main>
       <section className="hero">
@@ -77,6 +117,8 @@ export default function Home() {
           the right yarn, needles, and hooks.
         </p>
       </section>
+
+      {recent && <ContinueProject project={recent} />}
 
       <section className="features" aria-label="What you'll find">
         {features.map((feature) => (

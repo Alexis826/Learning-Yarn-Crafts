@@ -3,20 +3,58 @@
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import YarnBall from "../YarnBall";
+import ProgressBar from "./ProgressBar";
 import ProjectRendering, { hasRendering } from "./ProjectRendering";
+import StitchCounter from "./StitchCounter";
+import { useProjectProgress } from "./useProjectProgress";
 
-// A grid of project tiles; clicking one opens its directions. `showAdd` puts
-// the Add project tile (which leads to Ask Loopy) first.
-export default function ProjectGrid({ projects, showAdd = false, badge }) {
+// A grid of project tiles, most completed first; clicking one opens its
+// directions, with step checkboxes and a row & stitch counter. `showAdd` puts
+// the Add project tile (which leads to Ask Loopy) first. `initialProgress` is
+// the signed-in user's saved progress, keyed by project id. `openId` opens
+// that project's directions when the page loads.
+export default function ProjectGrid({
+  projects,
+  showAdd = false,
+  badge,
+  signedIn = false,
+  initialProgress = {},
+  openId,
+}) {
   const [open, setOpen] = useState(null);
   const dialogRef = useRef(null);
   const titleId = useId();
+  const progress = useProjectProgress({ signedIn, initial: initialProgress });
+
+  function toggleStep(project, index) {
+    const done = new Set(progress.get(project.id).completedSteps);
+    if (done.has(index)) done.delete(index);
+    else done.add(index);
+    progress.update(project.id, { completedSteps: [...done].sort((a, b) => a - b) });
+  }
+
+  // Only count checked steps that still exist in the project.
+  function stepsDone(project) {
+    return progress.get(project.id).completedSteps.filter((i) => i < project.steps.length).length;
+  }
+
+  // Most completed first; projects with equal progress keep their order.
+  const completion = (project) =>
+    project.steps.length ? stepsDone(project) / project.steps.length : 0;
+  const sorted = [...projects].sort((a, b) => completion(b) - completion(a));
 
   useEffect(() => {
     const dialog = dialogRef.current;
     if (open && !dialog.open) dialog.showModal();
     if (!open && dialog.open) dialog.close();
   }, [open]);
+
+  // Open the linked project once, e.g. from the home page's Continue button.
+  useEffect(() => {
+    const linked = openId && projects.find((p) => p.id === openId);
+    if (linked) setOpen(linked);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openId]);
 
   return (
     <>
@@ -29,7 +67,7 @@ export default function ProjectGrid({ projects, showAdd = false, badge }) {
             </Link>
           </li>
         )}
-        {projects.map((project) => (
+        {sorted.map((project) => (
           <li key={project.id}>
             <button
               type="button"
@@ -44,8 +82,12 @@ export default function ProjectGrid({ projects, showAdd = false, badge }) {
               )}
               <span className="project-name">{project.name}</span>
               {project.craft && <span className="project-craft">{project.craft}</span>}
-              {project.details?.Time && (
-                <span className="project-time">{project.details.Time}</span>
+              {stepsDone(project) > 0 ? (
+                <ProgressBar done={stepsDone(project)} total={project.steps.length} compact />
+              ) : (
+                project.details?.Time && (
+                  <span className="project-time">{project.details.Time}</span>
+                )
               )}
             </button>
           </li>
@@ -100,12 +142,41 @@ export default function ProjectGrid({ projects, showAdd = false, badge }) {
                 </ul>
               </>
             )}
-            <h3>Directions</h3>
-            <ol>
-              {open.steps.map((step) => (
-                <li key={step}>{step}</li>
-              ))}
+            <StitchCounter
+              key={open.id}
+              craft={open.craft}
+              rowCount={progress.get(open.id).rowCount}
+              stitchCount={progress.get(open.id).stitchCount}
+              onChange={(change) => progress.update(open.id, change)}
+            />
+            <div className="directions-heading">
+              <h3>Directions</h3>
+              <ProgressBar done={stepsDone(open)} total={open.steps.length} />
+            </div>
+            <ol className="step-checklist">
+              {open.steps.map((step, index) => {
+                const checked = progress.get(open.id).completedSteps.includes(index);
+                return (
+                  <li key={step} className={checked ? "done" : undefined}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggleStep(open, index)}
+                      />
+                      <span className="step-number">{index + 1}.</span>
+                      <span>{step}</span>
+                    </label>
+                  </li>
+                );
+              })}
             </ol>
+            {!signedIn && (
+              <p className="progress-note">
+                Your progress is saved in this browser.{" "}
+                <Link href="/sign-in">Sign in</Link> to keep it on every device.
+              </p>
+            )}
             {open.tip && (
               <p className="project-tip">
                 <strong>Tip:</strong> {open.tip}

@@ -56,7 +56,11 @@ export async function askLoopy(_previous, formData) {
     };
   }
 
-  await recordLoopyRequest(user.id);
+  await recordLoopyRequest(user.id, {
+    prompt: message || youtubeUrl || null,
+    projectName: answer.project?.name,
+    suggestions: answer.suggestions,
+  });
 
   let project = null;
   if (answer.project) {
@@ -68,6 +72,7 @@ export async function askLoopy(_previous, formData) {
   return {
     reply: answer.reply,
     project,
+    suggestions: answer.suggestions,
     // null means unlimited (the Ultimate plan).
     remaining: allowance.limit === Infinity ? null : allowance.remaining - 1,
   };

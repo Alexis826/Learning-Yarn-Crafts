@@ -13,8 +13,10 @@ export const dynamic = "force-dynamic";
 
 const crafts = ["Crochet", "Knitting"];
 
-export default async function Projects() {
+export default async function Projects({ searchParams }) {
   const user = await currentUser();
+  // ?open=<project id> opens that project's directions (from Continue links).
+  const { open: openId } = await searchParams;
   const saved = user
     ? await sql`
         select id, name, craft, materials, steps, details, tip
@@ -23,6 +25,25 @@ export default async function Projects() {
         order by created_at
       `
     : [];
+
+  // The user's step checkmarks and counters, keyed by project id.
+  const progressRows = user
+    ? await sql`
+        select project_key, completed_steps, row_count, stitch_count
+        from project_progress where user_id = ${user.id}
+      `
+    : [];
+  const progress = Object.fromEntries(
+    progressRows.map((row) => [
+      row.project_key,
+      {
+        completedSteps: row.completed_steps,
+        rowCount: row.row_count,
+        stitchCount: row.stitch_count,
+      },
+    ]),
+  );
+  const tracking = { signedIn: Boolean(user), initialProgress: progress, openId };
 
   return (
     <main className="projects">
@@ -36,7 +57,7 @@ export default async function Projects() {
               Instructions Loopy writes from your photos and videos are saved
               here. Click a project to open its directions.
             </p>
-            <ProjectGrid projects={saved} showAdd />
+            <ProjectGrid projects={saved} showAdd {...tracking} />
           </>
         ) : (
           <div className="signup-notice">
@@ -60,7 +81,8 @@ export default async function Projects() {
         <p>
           Quick, easy projects to practice your new skills. Each one takes a
           couple of hours or less. Click a project for the yarn, tools and
-          step-by-step directions.
+          step-by-step directions, then check off steps and count rows as you
+          go.
         </p>
         {crafts.map((craft) => (
           <div key={craft} className="starter-group">
@@ -68,6 +90,7 @@ export default async function Projects() {
             <ProjectGrid
               projects={starterProjects.filter((p) => p.craft === craft)}
               badge="Beginner"
+              {...tracking}
             />
           </div>
         ))}
