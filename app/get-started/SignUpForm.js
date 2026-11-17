@@ -73,7 +73,7 @@ export default function SignUpForm() {
             to your account.
           </p>
         )}
-        <a href="/get-started" className="button">
+        <a href="/profile" className="button">
           {checkoutError ? "See my plan" : "Continue"}
         </a>
       </div>

@@ -26,8 +26,8 @@ export async function startCheckout(plan) {
       client_reference_id: user.id,
       line_items: [{ price: priceIds[plan], quantity: 1 }],
       subscription_data: { metadata: { userId: user.id } },
-      success_url: `${origin}/get-started?checkout=success`,
-      cancel_url: `${origin}/get-started?checkout=cancelled`,
+      success_url: `${origin}/profile?checkout=success`,
+      cancel_url: `${origin}/profile?checkout=cancelled`,
     });
     return { url: session.url };
   } catch (error) {
@@ -47,7 +47,7 @@ export async function openBillingPortal() {
 
     const session = await getStripe().billingPortal.sessions.create({
       customer: profile.stripe_customer_id,
-      return_url: `${await siteOrigin()}/get-started`,
+      return_url: `${await siteOrigin()}/profile`,
     });
     return { url: session.url };
   } catch (error) {

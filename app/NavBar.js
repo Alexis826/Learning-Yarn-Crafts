@@ -94,7 +94,13 @@ export default function NavBar() {
         )}
         {user && (
           <span className="nav-account">
-            <span className="nav-user">Hi, {user.name || user.email}</span>
+            <Link
+              href="/profile"
+              className="nav-user"
+              aria-current={pathname === "/profile" ? "page" : undefined}
+            >
+              Hi, {user.name || user.email}
+            </Link>
             <button type="button" className="nav-signout" onClick={signOut}>
               Sign out
             </button>
