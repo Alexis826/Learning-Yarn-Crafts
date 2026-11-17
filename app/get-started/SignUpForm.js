@@ -1,19 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { authClient } from "@/lib/auth/client";
 import { authErrorMessage } from "@/lib/auth/errors";
 import { plans } from "../plans";
-import { choosePlan } from "./actions";
+import { startFreePlan } from "./actions";
+import { startCheckout } from "./billing";
 
 export default function SignUpForm() {
-  const router = useRouter();
   const [plan, setPlan] = useState("Free");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [welcomeName, setWelcomeName] = useState("");
+  const [checkoutError, setCheckoutError] = useState("");
+  const paid = plan !== "Free";
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -33,14 +34,23 @@ export default function SignUpForm() {
         return;
       }
 
-      const result = await choosePlan(plan);
+      // Every account starts on Free; paid plans unlock once Stripe confirms payment.
+      const result = await startFreePlan();
       if (result.error) {
         setError(result.error);
         return;
       }
 
+      if (paid) {
+        const checkout = await startCheckout(plan);
+        if (checkout.url) {
+          window.location.assign(checkout.url);
+          return;
+        }
+        setCheckoutError(checkout.error);
+      }
+
       setWelcomeName(name);
-      router.refresh();
     } catch (err) {
       setError(authErrorMessage(err, "We couldn't create your account. Please try again."));
     } finally {
@@ -52,13 +62,20 @@ export default function SignUpForm() {
     return (
       <div className="signup-notice" role="status">
         <h2>Welcome, {welcomeName}!</h2>
-        <p>
-          Your account is ready on the {plan} plan. Your projects will be saved
-          to your account.
-        </p>
-        <Link href="/projects" className="button">
-          Go to my projects
-        </Link>
+        {checkoutError ? (
+          <p>
+            Your account is ready on the Free plan, but {checkoutError.toLowerCase()} You
+            can upgrade anytime from this page.
+          </p>
+        ) : (
+          <p>
+            Your account is ready on the Free plan. Your projects will be saved
+            to your account.
+          </p>
+        )}
+        <a href="/get-started" className="button">
+          {checkoutError ? "See my plan" : "Continue"}
+        </a>
       </div>
     );
   }
@@ -123,8 +140,17 @@ export default function SignUpForm() {
         </p>
       )}
       <button type="submit" className="button" disabled={pending}>
-        {pending ? "Creating account…" : "Create account"}
+        {pending
+          ? paid
+            ? "Opening secure checkout…"
+            : "Creating account…"
+          : paid
+            ? `Create account & pay ${plans.find((p) => p.name === plan).price}/month`
+            : "Create account"}
       </button>
+      {paid && (
+        <p className="form-switch">Payment is handled securely by Stripe. Cancel anytime.</p>
+      )}
       <p className="form-switch">
         Already have an account? <Link href="/sign-in">Sign in</Link>
       </p>

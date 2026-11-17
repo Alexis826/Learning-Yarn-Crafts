@@ -50,8 +50,8 @@ export default async function AskLoopy() {
             You&apos;re on the Free plan. Pro includes 10 Loopy requests a
             month, and Ultimate is unlimited.
           </p>
-          <Link href="/#plans-heading" className="button">
-            See plans
+          <Link href="/get-started" className="button">
+            Upgrade
           </Link>
         </div>
       ) : (
